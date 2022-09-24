@@ -1,0 +1,15 @@
+ubuntu:~/environment/BasicHelloWorld $ /home/ubuntu/environment/charm-v7.0.0/bin/charmrun +p1 hello 
+Charmrun> scalable start enabled. 
+Charmrun> started all node programs in 2.142 seconds.
+Charm++> Running in non-SMP mode: 1 processes (PEs)
+Converse/Charm++ Commit ID: v70000
+Charm++ built without optimization.
+Do not use for performance benchmarking (build with --with-production to do so).
+Charm++ built with internal error checking enabled.
+Do not use for performance benchmarking (build without --enable-error-checking to do so).
+Charm++> scheduler running in netpoll mode.
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 1 hosts
+Charm++> cpu topology info is gathered in 0.001 seconds.
+Hello World!
+[Partition 0][Node 0] End of program
