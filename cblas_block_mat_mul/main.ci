@@ -1,0 +1,12 @@
+mainmodule main {
+
+  readonly CProxy_Main mainProxy;
+
+  extern module cblasmatmul;
+
+  mainchare Main {
+    entry Main(CkArgMsg* msg);
+    entry void done();
+  };
+
+};

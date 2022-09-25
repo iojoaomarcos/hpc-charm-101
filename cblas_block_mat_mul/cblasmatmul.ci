@@ -1,0 +1,8 @@
+module cblasmatmul {
+
+  array [1D] Cblasmatmul {
+    entry Cblasmatmul();
+    entry void sayHi(int);
+  };
+
+};
