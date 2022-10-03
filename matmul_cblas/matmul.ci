@@ -24,10 +24,7 @@ mainmodule matmul {
           serial {
           CkAssert(KA == KB);
 
-          // This DGEMM makes no attempt at optimization. For
-          // benchmarking, it should be replaced with a library
-          // call. The local version is kept for easy portability.
-          example_dgemm(M, N, KA,
+          dgemm(M, N, KA,
                         alpha,
                         blockA, blockB, data);
 
