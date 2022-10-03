@@ -2,32 +2,53 @@
 
 #include "main.h"
 #include "cblasmatmul.decl.h"
+#include<stdlib.h>
+
+#define MATRIX_SIZE 250
 
 
 /* readonly */ CProxy_Main mainProxy;
 
 
-// Entry point of Charm++ application
+// Ponto de Inicio da aplicação Charm++
 Main::Main(CkArgMsg* msg) {
 
-  // Initialize the local member variables
+  // Inicializando as variáveis locais
   doneCount = 0;    // Set doneCount to 0
   numElements = 5;  // Default numElements to 5
-
-  // There should be 0 or 1 command line arguements.
-  //   If there is one, it is the number of "Hello"
-  //   chares that should be created.
-  if (msg->argc > 1)
+  numInstancias = 5; // Numero padrão de instancias (chares)
+  
+  // Definindo matrizes e seus iteradores
+  int matrixA[MATRIX_SIZE][MATRIX_SIZE], matrixB[MATRIX_SIZE][MATRIX_SIZE], i,j; 
+  
+  // int matrixA[2][2] = {
+  //       {1,2},
+  //       {3,-1}
+  //   };
+  // int matrixB[2][3] = {
+  //     {1,-2,3},
+  //     {2,4,0}
+  // };
+    
+  // A partir do argumento recebido, define-se a quantidade
+  //     de instancias a serem executadas de forma paralela
+  if (msg->argc > 1){
     numElements = atoi(msg->argv[1]);
+    numInstancias = atoi(msg->argv[1]);
+  }
 
-  // We are done with msg so delete it.
   delete msg;
 
   // Display some info about this execution
   //   for the user.
-  CkPrintf("Running \"Hello World\" with %d elements "
-           "using %d processors.\n",
-           numElements, CkNumPes());
+  CkPrintf("Inicializando calculo de produto de matrizes");
+  
+  for( i = 0; i < MATRIX_SIZE; ++i){
+    for( j = 0;  j < MATRIX_SIZE; ++j){
+      matrixA[i][j] = rand();
+      matrixB[i][j] = rand();
+    }
+  }
 
   // Set the mainProxy readonly to point to a
   //   proxy for the Main chare object (this
@@ -36,6 +57,8 @@ Main::Main(CkArgMsg* msg) {
 
   // Create the array of Hello chare objects.
   CProxy_Cblasmatmul helloArray = CProxy_Cblasmatmul::ckNew(numElements);
+  
+  CProxy_Cblasmatmul matmulArray = CProxy_Cblasmatmul::ckNew(numInstancias);
 
   // Invoke the "sayHi()" entry method on all of the
   //   elements in the helloArray array of chare objects.
@@ -56,7 +79,7 @@ void Main::done() {
   //   objects have indicated that they are done, then exit.
   //   Otherwise, continue waiting for the Hello chare objects.
   doneCount++;
-  if (doneCount >= numElements)
+  if (doneCount >= numInstancias)
     CkExit();
 }
 

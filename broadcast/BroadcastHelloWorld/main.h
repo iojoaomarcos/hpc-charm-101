@@ -8,6 +8,8 @@ class Main : public CBase_Main {
   /// Member Variables (Object State) ///
   int numElements;
   int doneCount;
+  int numInstancias;
+  int matrixA, matrixB, i, j;
 
  public:
 

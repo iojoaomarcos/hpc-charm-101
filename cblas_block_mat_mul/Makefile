@@ -6,7 +6,7 @@ default: all
 all: cblasmatmul
 
 
-cblasmatmul : main.o cblasmatmul.o
+cblasmatmul : main.o cblasmatmul.o 
 	$(CHARMC) -language charm++ -o cblasmatmul main.o cblasmatmul.o
 
 main.o : main.C main.h main.decl.h main.def.h cblasmatmul.decl.h

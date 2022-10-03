@@ -2,6 +2,8 @@
 
 CHARMDIR = "/home/ubuntu/environment/charm-v7.0.0/"
 CHARMC = $(CHARMDIR)/bin/charmc $(OPTS)
+LIBS = -llapack -lblas -lgfortran
+BLASPATH ="/home/ubuntu/environment/try/cblas_install/"
 
 CXX=$(CHARMC)
 CXXFLAGS=$(OPTS)
@@ -11,7 +13,7 @@ BINARY=matmul
 all: $(BINARY)
 
 $(BINARY): matmul.o
-	$(CHARMC) -o $@ $^ $(OPTS)
+	$(CHARMC) -o $@ $^ $(OPTS) -L $(BLASPATH)-l $(LIBS)
 
 matmul.o: matmul.C matmul.decl.h
 matmul.decl.h: matmul.ci

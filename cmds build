@@ -1,0 +1,7 @@
+/home/ubuntu/environment/charm-v7.0.0/bin/charmxi main.ci
+/home/ubuntu/environment/charm-v7.0.0/bin/charmxi cblasmatmul.ci
+/home/ubuntu/environment/charm-v7.0.0/bin/charmc main.C
+/home/ubuntu/environment/charm-v7.0.0/bin/charmc cblasmatmul.C -L /home/ubuntu/environment/try/cblas_install/BLAS-3.10.0/ -l -llapack -lblas -lgfortran
+
+
+g++ cblasmatmul.C -L /home/ubuntu/environment/try/cblas_install/ -llapack -lblas -lgfortran
