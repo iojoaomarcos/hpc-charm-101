@@ -1,19 +1,46 @@
 #include "matmul.decl.h"
 #include "rand48_replacement.h"
+#include "cblas.h"
 
 CProxy_Main mainProxy;
 
-void example_dgemm(int M, int N, int K, double alpha,
-                   double *A, double *B, double *C) {
-  for (int i = 0; i < M; ++i) {
-    for (int j = 0; j < N; ++j) {
-      double sum = 0.0;
-      for (int k = 0; k < K; ++k) {
-        sum += A[i*K + k] * B[k*N + j];
-      }
-      C[N*i + j] = C[N*i + j] + alpha*sum;
+void blas_blocked_kij_algorithm(int n, int cacheBlock, double* a, double* b,
+        double* result) {
+    int k, i, j;
+    double first = 1.0, second = 1.0;
+    for (k = 0; k < n / cacheBlock; k++) {
+        for (i = 0; i < n / cacheBlock; i++) {
+            double* block = &a[(n * cacheBlock * i) + (cacheBlock * k)];
+            for (j = 0; j < n / cacheBlock; j++) {
+                cblas_dgemm(CblasRowMajor, CblasNoTrans,
+                        CblasNoTrans,
+                        cacheBlock, cacheBlock, cacheBlock,
+                        first, block,
+                        n, &b[(n * cacheBlock * k) + (cacheBlock * j)],
+                        n, second,
+                        &result[(n * cacheBlock * i) + (cacheBlock * j)],
+                        n);
+            }
+        }
     }
-  }
+  //Prints go here
+
+}
+
+void example_dgemm(int M, int N, int K, double alpha,
+                  double *A, double *B, double *C) {
+  // for (int i = 0; i < M; ++i) {
+  //   for (int j = 0; j < N; ++j) {
+  //     double sum = 0.0;
+  //     for (int k = 0; k < K; ++k) {
+  //       sum += A[i*K + k] * B[k*N + j];
+  //     }
+  //     C[N*i + j] = C[N*i + j] + alpha*sum;
+      
+  //   }
+  // }
+  
+  cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, M, N, K, alpha, A, M, B, K, 0.001, C, M);
 }
 
 /*
@@ -57,12 +84,13 @@ public:
 class Block : public CBase_Block {
   unsigned int blockSize, numBlocks, block;
   double* data;
+  unsigned int elems;
   Block_SDAG_CODE
   public:
   Block(bool randomInit, unsigned int blockSize_, unsigned int numBlocks_)
     : blockSize(blockSize_), numBlocks(numBlocks_)
   {
-    unsigned int elems = blockSize * blockSize;
+    elems = blockSize * blockSize;
     data = new double[elems];
     if(randomInit)
       for (int i = 0; i < elems; ++i)

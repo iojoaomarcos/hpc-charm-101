@@ -44,6 +44,8 @@ mainmodule matmul {
         }
       }
       serial {
+        for (int i = 0; i < elems; ++i)
+          CkPrintf("%lf, ", data[i]);
         contribute(done);
       }
     };
