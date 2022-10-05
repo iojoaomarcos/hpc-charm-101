@@ -1,22 +1,17 @@
+/*
+  FORKED FROM https://github.com/UIUC-PPL/charm/tree/main/examples/charm%2B%2B/matmul
+  Enhancement: matrix multiplication using cBLAS 
+*/
+
 #include "matmul.decl.h"
 #include "rand48_replacement.h"
 #include "cblas.h"
 
 CProxy_Main mainProxy;
 
-void example_dgemm(int M, int N, int K, double alpha,
+
+void dgemm(int M, int N, int K, double alpha,
                   double *A, double *B, double *C) {
-  // for (int i = 0; i < M; ++i) {
-  //   for (int j = 0; j < N; ++j) {
-  //     double sum = 0.0;
-  //     for (int k = 0; k < K; ++k) {
-  //       sum += A[i*K + k] * B[k*N + j];
-  //     }
-  //     C[N*i + j] = C[N*i + j] + alpha*sum;
-      
-  //   }
-  // }
-  
   cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, M, N, K, alpha, A, M, B, K, 0.001, C, M);
 }
 
